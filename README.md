@@ -1,4 +1,6 @@
-cyclopy
+CYCLOPY
 =======
 
-cyclostratigraphic analysis helper classes and methods in pure python
+Time-series analysis for cyclostratigraphy ported to python
+
+
