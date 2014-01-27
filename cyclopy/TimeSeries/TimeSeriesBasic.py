@@ -1,0 +1,93 @@
+from __future__ import division
+import numpy as np
+
+from matplotlib.pyplot import plot, interactive, subplot, figure, title, xlabel, ylabel, grid, yscale
+interactive(True)
+
+import SignalFilters
+
+from copy import deepcopy
+from SignalFilters import bandpass
+from SignalFilters import spectrogram_mtspec
+from Spectrogram import Spectrogram
+
+
+
+from scipy import signal
+
+import pylab
+
+
+#            import pdb; pdb.set_trace()
+        
+    
+
+class TimeSeriesBasic(): 
+   def __init__(self, y, title="series", unit = "m"):
+       self.original_mean_ = y.mean()
+       self.original_std_ = y.std()
+       self.y_ = y
+       self.title_ = title
+       self.unit_ = unit   
+
+   def printTitleInfos(self) :
+       self.printInfosSeparator("Title")
+       print("Series Name: \t" + str(self.title_) )
+       
+   def getNumberOfSamples(self):
+        return self.y_.size
+        
+   def printInfosSeparator(self, title = "info", total_lenght = 100):
+       print("\n")
+       n_title = len(title)
+       
+       n = total_lenght - n_title - 2
+       
+       line_lenght = np.floor( n / 2 )
+       line = '-' * line_lenght
+       
+       print(line  + " " +  title + " " + line)  
+   
+       
+   def getMean(self):
+       return self.y_.mean()
+   
+   def getStd(self):
+       return self.y_.std()
+       
+   def getY(self):
+       return self.y_
+       
+             
+       
+   def changeMean(self, mean=0.0):
+       '''
+       change the mean to the given value
+       '''
+       self.y_ = self.y_ - self.y_.mean() + mean
+
+   def changeStd(self, std= 1.0):
+       '''
+       change the std to the given value
+       '''
+       mean = self.getMean()
+       self.y_ -= mean
+       self.y_ = self.y_ / self.y_.std() * std
+       
+       self.y_ += mean
+       
+   def restoreMeanStdToOriginal(self):
+       self.changeMean(self.original_mean_)
+       self.changeStd(self.original_std_)
+       
+   def normalizeMeanStd(self ):
+       self.changeMean(0.0)
+       self.changeStd(1.0)
+       
+   def getSeries(self):
+       return self.y_
+   
+   def getDeepCopy(self):
+       return deepcopy(self)  
+   
+       
