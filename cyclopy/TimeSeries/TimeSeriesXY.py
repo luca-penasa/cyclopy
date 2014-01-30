@@ -1,10 +1,21 @@
 from TimeSeriesBasic import *
 
 class TimeSeriesXY(TimeSeriesBasic):
-    def __init__(self, x, y, title="series", unit="m"):
+    """
+    A time series made of two 1d vectors x, and y
+    x are the sampling positions
+    y the samples values
+    args and kwargs are passed to TimeSeriesBasic. Please see docs fot that
+    class.
+    
+    Note: The series is ALWAYS sorted so that x's values are increasing
+    
+    """
+    def __init__(self, x, y, *args, **kwargs):        
+        assert (x.size ==  y.size) #x and y must have same size         
+        #we want these two series to be sorted
         
-        assert (x.size ==  y.size) #x and y must have same size 
-        TimeSeriesBasic.__init__(self, y, title, unit)
+        TimeSeriesBasic.__init__(self, y, *args, **kwargs)
         self.x_ = x
              
         self.sortSamples() #ensure samples are sorted

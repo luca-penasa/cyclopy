@@ -9,3 +9,4 @@ import SSA
 import SPModelling
 import SpectralEstimation
 import KernelSmoother
+import MCMCodedStratigraphy

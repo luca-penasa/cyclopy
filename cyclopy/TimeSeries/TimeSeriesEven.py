@@ -1,8 +1,23 @@
 from TimeSeriesBasic import *
+import scipy
+import scipy.stats
 
 class TimeSeriesEven(TimeSeriesBasic):
-    def __init__(self, y, x_step = 1.0, x_start=0.0, title="series", unit="m"):
-        TimeSeriesBasic.__init__(self, y, title, unit)        
+    """
+    A time series made of only a vector.
+    optionally the samples start position and the sampling step may be 
+    provided.
+    aka an evenly spaced time series
+    
+    args and kwargs may be the same of a TimeSeriesBasic
+    
+    Note: Given most spectral methods are for evenly spaced ts this class
+    support nice and advanced analysis
+    
+    See Also: TimeSeriesXY and TimeSeriesBasic
+    """
+    def __init__(self, y, x_step = 1.0, x_start=0.0, *args, **kwargs):
+        TimeSeriesBasic.__init__(self, y, *args, **kwargs)        
         self.x_step_ = x_step
         self.x_start_ = x_start
 
@@ -87,16 +102,27 @@ class TimeSeriesEven(TimeSeriesBasic):
         return new_series
         
 
-    def getMTMSpectrum(self, pi = 2, pad_to=100000, norm=True, from_x=None, to_x=None, max_f=None, detrend=True, det_type='linear'):
+    def getMTMSpectrum(self, pi = 2, pad_to=100000, norm=True, 
+                       from_x=None, to_x=None, 
+                       max_f=None, 
+                       detrend=True, det_type='linear', 
+                       stats = False,
+                       p_crit = 0.95
+                       ):
         """
-        Get the MTM (Thompson multitaper method) spectrum for the series.
+        Get the MTM (Thompson multitaper method) spectrum for the series
+        
+        This is an interface to mtspec python module
         
         Keyword arguments:
         pi          --  the bandwhidth passed to mtspec.mtspec method        
         pad_to      --  if needed pad the series with zeros
         norm        --  normalize forcing the higher peak to 1.0
         from/to_x   --  compute the spectrum only for a sub-slice of the series
-        max_f       --  get rid of frequencies above this value (cycles/time)  
+        max_f       --  get rid of frequencies above this value (cycles/time)
+        stats       --  gives back a lot of additional stats and data from the 
+                        mtspec routines
+        p_crit      --  critical p-value for the f-test used for reshaped spectra
         """     
         
             
@@ -118,21 +144,45 @@ class TimeSeriesEven(TimeSeriesBasic):
         if detrend:
             new_signal = signal.detrend(new_signal, type=det_type)
             
-        ampl, freqs = mtspec.mtspec(new_signal, ser.x_step_, pi)
 
+        ampl, freqs = mtspec.mtspec(new_signal, ser.x_step_, pi, nfft=pad_to)
+        
+        statistics = {}
+        
+        if stats:
+            ampl_reshaped, freqs2, eigensp, eigencoeff, weights, jack, f, dof = mtspec.mtspec(new_signal, ser.x_step_, pi, statistics=True, fcrit=p_crit, optional_output=True, rshape=0, nfft=pad_to)
+            nd = eigensp.shape[1]
+            lev = scipy.stats.f.ppf(np.array([0.80,0.90,0.95,0.99]), 2, 2*(nd - 1))
+            statistics = {      'reshaped': ampl_reshaped, 
+                                'eigenspectra': eigensp,
+                                'eigencoeff': eigencoeff,
+                                'weights': weights,
+                                'jack5_95': jack,
+                                'f_values': f,
+                                'dof': dof}
+                                                        
         if max_f != None:
-            ids = np.argwhere(freqs <= max_f)
-            
+            ids = np.argwhere(freqs <= max_f)            
             ampl = ampl[ids]
             freqs = freqs[ids]
+            
+            if stats: # cut away also statistics
+                for k in statistics.keys():
+                    arr = statistics[k]
+                    statistics[k] = arr[ids]                    
+                
+        
+        if stats:
+            statistics['p_levels'] = lev
                 
         if norm == True:
             ampl = ampl/np.max(ampl)
                      
         
-            
-        
-        return freqs, ampl
+        if stats:
+            return freqs, ampl, statistics
+        else:
+            return freqs, ampl
         
     def plotMTMSpectrum(self, nfig=False, ylog=False, **kwargs):
         """
