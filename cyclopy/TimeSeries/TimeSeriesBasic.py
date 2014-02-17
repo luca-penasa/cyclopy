@@ -4,12 +4,12 @@ import numpy as np
 from matplotlib.pyplot import plot, interactive, subplot, figure, title, xlabel, ylabel, grid, yscale
 interactive(True)
 
-import SignalFilters
+
 
 from copy import deepcopy
-from SignalFilters import bandpass
-from SignalFilters import spectrogram_mtspec
-from Spectrogram import Spectrogram
+from ..SignalFilters import bandpass
+from ..SignalFilters import spectrogram_mtspec
+from ..Spectrogram import Spectrogram
 
 
 

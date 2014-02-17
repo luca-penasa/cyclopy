@@ -104,9 +104,8 @@ def generateAR1Noise(n, c, gamma, alpha):
     gamma lag-1 autocorrelation
     alpha noise innovation variance parameter
     
-    return an n x c matric of red noise series
+    return an n x c matrix of red noise series
     """
-    #maybe I could change the seed each time
     X = np.zeros((n, c))
     X[0, :] = np.sqrt(alpha**2 / (1 - gamma**2)) * randn(c)
     z = alpha * randn(n, c)

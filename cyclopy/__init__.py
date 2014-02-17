@@ -10,3 +10,4 @@ import SPModelling
 import SpectralEstimation
 import KernelSmoother
 import MCMCodedStratigraphy
+import NoiseModeling
