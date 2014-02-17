@@ -11,6 +11,7 @@ from pylab import plot, interactive
 
 def getMedian(signal, startarg, stoparg):
     """
+    get the median value of a slice of an array
     stoparg is excluded
     startarg comprised        
     """    
@@ -61,12 +62,7 @@ def getAR1Spectrum( alpha, ro, freqs, f_nyquist, N=None ):
     
     return norm * alpha / b
     
-    
-    
-    
-    
-    
-        
+
 def residuals(args, observed, freqs, f_nyquist, N=1, maxfreq=10):
     print (args)
     alpha, ro = args

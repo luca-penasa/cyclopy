@@ -51,7 +51,7 @@ def AgeModelFromPicksAndPeriod(picks, period=100, zero=0):
     return model
     
 def DepthToAge(depths, agemodel):
-    interpolator = UnivariateSpline(agemodel[:,0], agemodel[:,1], k=1) #k=1 means linear interpolation actually                           
+    interpolator = UnivariateSpline(agemodel[:,0], agemodel[:,1], k=1) # k=1 means linear interpolation actually
     ages =  interpolator(depths)                          
     return ages
     

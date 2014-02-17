@@ -20,22 +20,25 @@ pb = pbar.ProgressBar()
 import MonteCarloMethods as mcm
 
 __name__ = "SSA"
+__doc__ = """
+This code provide a partial reimplementation of the original matlab code from eric@gi.alaska.edu (Eric Breitenberger)
+"""
 
 class SSA:
-    def __init__(self, y, emb_dim = 100, acorr_method = "unbiased"):
+    def __init__(self, y, emb_dim=100, acorr_method="unbiased"):
         """
         default init
         """
         self.emb_dim_ = None
         self.autocorrelation_method_ = "unbiased"
-        self.N_MC_ = 100
+        self.num_montecarlo_ = 100
         
         #some checks on input signal
-        assert(len(y.shape) == 1) #a vector?
-        assert(len(y) != 0) #is void?
+        assert(len(y.shape) == 1) # a vector?
+        assert(len(y) != 0) # is void?
         
-        self.y_ = y #time series
-        self.N_ = len(y) #number of samples 
+        self.y_ = y # time series
+        self.n_samples_ = len(y) # number of samples
         
         self.setEmbeddingDimension(emb_dim)
         self.setAutocorrelationMethod(acorr_method)
@@ -46,7 +49,7 @@ class SSA:
         """
         the embedding dimension to be used
         """
-        assert((emb_dim -1) <= self.N_) #not a too big dimension                
+        assert((emb_dim -1) <= self.n_samples_) #not a too big dimension
         assert( type(emb_dim) == int ) #is it an int?
         
         if emb_dim != self.emb_dim_: #if emb_dim was changed we must recompute all
@@ -55,18 +58,22 @@ class SSA:
             
     def setAutocorrelationMethod(self, method):
         """
-        methods are 
+        methods to be used for estimating autocorrelation of your signal
+        autocorrelation is then used to simulate a "similar" time-series of random values
+
+        Accepted methods are:
         - "biased": Yule-Walker
         - "unbiased": traditional method
         see documentation for LagAutoCovariance
         """
-        assert((method=="biased") or (method=="unbiased")) #only two methods implemented
-        if self.autocorrelation_method_ != method: #is it the same?
-            self.autocorrelation_method_ = method #set it
-            self.need_recomputation_ = True #change flag
+        assert((method=="biased") or (method=="unbiased")) # only two methods implemented
+
+        if self.autocorrelation_method_ != method: # is it the same?
+            self.autocorrelation_method_ = method # set it
+            self.need_recomputation_ = True # change flag
     
     def update(self):
-        assert ((type(self.emb_dim_) == int) & (self.emb_dim_ > 0) ) #we need the embedding dimension
+        assert ((type(self.emb_dim_) == int) & (self.emb_dim_ > 0) ) # we need the embedding dimension to be set
 
         #do real computations
         self.Eig_, self.Val_ = EigenDecomposition(self.y_, self.emb_dim_, self.autocorrelation_method_) 
@@ -114,15 +121,15 @@ class SSA:
         print ("Gamma: " + str(gamma))
         print ("Alpha: " + str(alpha))
         
-        L = np.zeros((self.emb_dim_, self.N_MC_))
-        vs = np.zeros(self.N_MC_)
-        s = np.zeros(self.N_MC_)
+        L = np.zeros((self.emb_dim_, self.num_montecarlo_))
+        vs = np.zeros(self.num_montecarlo_)
+        s = np.zeros(self.num_montecarlo_)
 
         #produce surrogate data -> EACH ROW IS A REALIZATION
-        self.surrogates_ = mcm.generateAR1Noise(self.N_, self.N_MC_, gamma, alpha)
+        self.surrogates_ = mcm.generateAR1Noise(self.n_samples_, self.num_montecarlo_, gamma, alpha)
         #self.surrogates_ = np.loadtxt('/home/luca/Desktop/Smirra/Code/randomX.txt')
 	
-        for i in pb(np.arange(self.N_MC_ )):
+        for i in pb(np.arange(self.num_montecarlo_ )):
             acv = LagAutoCovariance(self.surrogates_[:,i], self.emb_dim_ - 1, self.autocorrelation_method_)
             T = toeplitz(acv)
             #do projection of T on pre-computed eigenbasis -> USING FIXED BASIS!!
@@ -140,6 +147,7 @@ class SSA:
     def getConfidence(self, p = 0.95):
         #sorting L
         L_sorted = np.sort(self.L_, axis=1) #in each row we have the same lambda for all the realizations
+
         #now create the two columns vector, for upper and lover confidence
         #one for each eigenvalue
         c = np.zeros((self.emb_dim_, 2))
@@ -155,10 +163,10 @@ class SSA:
         #probability at tails:
         p = (1-p) / 2 #two tailed
         #that corresponds to a "cut-off index", that depends on the number of realizations:
-        p_index = self.N_MC_ * p
+        p_index = self.num_montecarlo_ * p
         
         lower = np.floor(p_index) + 1
-        upper = self.N_MC_  - np.floor(p_index)
+        upper = self.num_montecarlo_  - np.floor(p_index)
         
         c[:,0] = L_sorted[:, lower - 1] #-1 couse we have a zero index!
         c[:,1] = L_sorted[:, upper - 1]
@@ -170,7 +178,7 @@ class SSA:
         
     def setNumberOfMonteCarloSimulations(self, number_MC):  
         assert(number_MC > 30) #a simple limit
-        self.N_MC_ = number_MC
+        self.num_montecarlo_ = number_MC
          
 
 #TODO da sistemare questa non sono sicuro che sia corretta    
@@ -191,13 +199,13 @@ class SSA:
 #        logsum = np.log(np.cumsum(V))
 #        logsum = np.flipud(logsum)
 #        
-#        L = self.N_ * nrm * (( sumlog / nrm) - logsum + np.log(nrm))
+#        L = self.n_samples_ * nrm * (( sumlog / nrm) - logsum + np.log(nrm))
 #        
 #        pen = np.arange(p)
 #        pen = pen * (2*p - pen)
 #        
 #        aic = -L + pen
-#        mdl = -L + pen * np.log(self.N_) / 2
+#        mdl = -L + pen * np.log(self.n_samples_) / 2
 #        
 #        kaic = np.arange(p)[aic == np.min(aic)]
 #        kmdel = np.arange(p)[mdl == np.min(mdl)]

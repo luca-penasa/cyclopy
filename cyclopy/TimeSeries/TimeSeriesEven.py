@@ -1,6 +1,11 @@
-from TimeSeriesBasic import *
 import scipy
 import scipy.stats
+
+from ..NumericalMethods import KernelSmoother
+from TimeSeriesBasic import *
+
+from ..NumericalMethods import KernelSmoother
+
 
 class TimeSeriesEven(TimeSeriesBasic):
     """
@@ -224,7 +229,7 @@ class TimeSeriesEven(TimeSeriesBasic):
         """
         spectra = self.getSetOfEvolutionarySpectra(positions, **kwargs)
         import matplotlib.pyplot as plt
-        from mpl_toolkits.mplot3d import Axes3D
+
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
 
@@ -309,7 +314,6 @@ class TimeSeriesEven(TimeSeriesBasic):
 	#TODO finish this, using scipy.stats.pearsonr
 
     def getKS(self, h=1.0):
-        import KernelSmoother
         smoother = KernelSmoother.KernelSmoother(self.getPositionVector() , self.y_)
         new_y = smoother(self.getPositionVector(), h)
         new_series = deepcopy(self)
@@ -317,7 +321,6 @@ class TimeSeriesEven(TimeSeriesBasic):
         return new_series
        
     def detrendKS(self, h=1.0):
-        import KernelSmoother
         smoother = KernelSmoother.KernelSmoother(self.getPositionVector() , self.y_)
         new_y = smoother(self.getPositionVector(), h)
         new_series = deepcopy(self)
