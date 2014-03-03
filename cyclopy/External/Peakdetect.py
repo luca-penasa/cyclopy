@@ -120,9 +120,9 @@ def peakdetect(y_axis, x_axis=None, lookahead=300, delta=0):
 
     #perform some checks
     if lookahead < 1:
-        raise ValueError, "Lookahead must be '1' or above in value"
+        raise ValueError( "Lookahead must be '1' or above in value")
     if not (np.isscalar(delta) and delta >= 0):
-        raise ValueError, "delta must be a positive number"
+        raise ValueError("delta must be a positive number")
 
     #maxima and minima candidates are temporarily stored in
     #mx and mn respectively
@@ -603,18 +603,18 @@ def _smooth(x, window_len=11, window='hanning'):
     a string   
     """
     if x.ndim != 1:
-        raise ValueError, "smooth only accepts 1 dimension arrays."
+        raise ValueError("smooth only accepts 1 dimension arrays.")
 
     if x.size < window_len:
-        raise ValueError, "Input vector needs to be bigger than window size."
+        raise ValueError("Input vector needs to be bigger than window size.")
 
     if window_len < 3:
         return x
 
     if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']:
-        raise (ValueError,
+        raise (ValueError(
                "Window is not one of '{0}', '{1}', '{2}', '{3}', '{4}'".format(
-                   *('flat', 'hanning', 'hamming', 'bartlett', 'blackman')))
+                   *('flat', 'hanning', 'hamming', 'bartlett', 'blackman'))))
 
     s = np.r_[x[window_len - 1:0:-1], x, x[-1:-window_len:-1]]
     #print(len(s))
@@ -652,8 +652,8 @@ def zero_crossings(y_axis, window=11):
     # check if zero-crossings are valid
     diff = np.diff(indices)
     if diff.std() / diff.mean() > 0.2:
-        print diff.std() / diff.mean()
-        print np.diff(indices)
+        print (diff.std() / diff.mean())
+        print (np.diff(indices))
         raise (ValueError,
                "False zero-crossings found, indicates problem {0} or {1}".format(
                    "with smoothing window", "problem with offset"))

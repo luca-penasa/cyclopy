@@ -1,3 +1,4 @@
 __author__ = 'luca'
 
-from KernelSmoother import KernelSmoother
+from cyclopy.NumericalMethods.KernelSmoother import KernelSmoother, smooth_signal
+

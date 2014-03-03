@@ -1,5 +1,5 @@
-from ..NumericalMethods import KernelSmoother
-from TimeSeriesBasic import *
+from cyclopy.NumericalMethods import KernelSmoother
+from cyclopy.TimeSeries.TimeSeriesBasic import TimeSeriesBasic
 
 
 class TimeSeriesXY(TimeSeriesBasic):

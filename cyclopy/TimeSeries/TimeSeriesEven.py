@@ -1,10 +1,8 @@
 import scipy
 import scipy.stats
 
-from ..NumericalMethods import KernelSmoother
-from TimeSeriesBasic import *
-
-from ..NumericalMethods import KernelSmoother
+from cyclopy.NumericalMethods import KernelSmoother
+from cyclopy.TimeSeries.TimeSeriesBasic import TimeSeriesBasic
 
 
 class TimeSeriesEven(TimeSeriesBasic):

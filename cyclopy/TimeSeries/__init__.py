@@ -1,4 +1,4 @@
 __author__ = 'luca penasa'
 
-from TimeSeriesEven import TimeSeriesEven
-from TimeSeriesXY import TimeSeriesXY
+from cyclopy.TimeSeries.TimeSeriesEven import TimeSeriesEven
+from cyclopy.TimeSeries.TimeSeriesXY import TimeSeriesXY

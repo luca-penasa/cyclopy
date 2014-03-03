@@ -2,10 +2,6 @@ from __future__ import division
 import numpy as np
 
 
-__name__ = "KernelSmoother"
-__author__ = "Luca Penasa"
-
-
 class KernelSmoother:
     """
     Kernel Smoothing as in "The elements of statistical learning: data mining, inference, and prediction" by Hastie et al. (2009)
@@ -119,7 +115,7 @@ class KernelSmoother:
             self.kernel = self._epanechnikov
             self.k_support = 1
         else:
-            raise TypeError, "You must give an existent kernel name: gaussian -> gau or epanechnikov -> epa are supported"
+            raise TypeError ("You must give an existent kernel name: gaussian -> 'gau' or epanechnikov -> 'epa' are supported")
 
         #evaluator selcetion, depending on kdtree use or not
         if self.use_kdtree == True:
@@ -197,3 +193,9 @@ class KernelSmoother:
         w = self.kernel(d)
         result = np.sum(w * ny) / np.sum(w)
         return result
+
+
+
+def smooth_signal(x, y, bandwidth, kdtree=False):
+    ks = KernelSmoother(x, y, kdtree)
+    return ks(x, bandwidth)

@@ -5,9 +5,9 @@ from matplotlib.pyplot import plot, interactive, subplot, figure, title, xlabel,
 interactive(True)
 
 from copy import deepcopy
-from ..SignalFilters import bandpass
-from ..SignalFilters import spectrogram_mtspec
-from ..Spectrogram import Spectrogram
+from cyclopy.SignalFilters import bandpass
+from cyclopy.SignalFilters import spectrogram_mtspec
+from cyclopy.Spectrogram import Spectrogram
 
 
 
