@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="mtspec-trunk" />
+    <orderEntry type="module" module-name="cybox-2.1.0.1" />
+    <orderEntry type="module" module-name="hyperspy-0.6" />
+    <orderEntry type="module" module-name="coils-1.0.6" />
+  </component>
+  <component name="ReSTService">
+    <option name="workdir" value="$MODULE_DIR$" />
+    <option name="DOC_DIR" value="$MODULE_DIR$" />
+  </component>
+</module>
+

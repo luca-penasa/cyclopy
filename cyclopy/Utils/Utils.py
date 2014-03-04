@@ -1,12 +1,25 @@
 from cyclopy.External import peakdetect
 from copy import deepcopy
 
-from matplotlib.pyplot import plot, text
 
 import numpy as np
 
 from matplotlib.pyplot import  plot,  text,  title, fill_between, ylabel, ylim, xlim, grid, xlabel, ylabel, gca
 from cyclopy.NumericalMethods import smooth_signal
+
+def getMedian(signal, startarg, stoparg):
+    """
+    get the median value of a slice of an array
+    stoparg is excluded
+    startarg comprised
+    """
+    if startarg < 0:
+        startarg = 0
+
+    if stoparg > len(signal):
+        stoparg = len(signal)
+
+    return np.median(signal[startarg:stoparg])
 
 def get_numbered_filename(filename, extension, path="./"):
     """

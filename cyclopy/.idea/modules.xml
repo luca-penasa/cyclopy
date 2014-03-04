@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../coils-1.0.6/.idea/coils-1.0.6.iml" filepath="$PROJECT_DIR$/../../coils-1.0.6/.idea/coils-1.0.6.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../cybox-2.1.0.1/.idea/cybox-2.1.0.1.iml" filepath="$PROJECT_DIR$/../../cybox-2.1.0.1/.idea/cybox-2.1.0.1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/cyclopy.iml" filepath="$PROJECT_DIR$/.idea/cyclopy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../hyperspy-0.6/.idea/hyperspy-0.6.iml" filepath="$PROJECT_DIR$/../../hyperspy-0.6/.idea/hyperspy-0.6.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../mtspec-trunk/.idea/mtspec-trunk.iml" filepath="$PROJECT_DIR$/../../mtspec-trunk/.idea/mtspec-trunk.iml" />
+    </modules>
+  </component>
+</project>
+

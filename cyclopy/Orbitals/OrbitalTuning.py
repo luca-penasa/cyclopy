@@ -5,22 +5,11 @@ Created on Thu Jan 16 16:03:40 2014
 @author: luca
 """
 
-try:
-    from matplotlib.pyplot import ginput
-except ImportError:
-    print("Need matplotlib to work. Install it - using pip install matplotlib for example")    
-    
-try:    
-    import numpy as np
-except ImportError:
-    print("Need numpy to work!")    
-    
-    
-try:
-    from scipy.interpolate import UnivariateSpline
-except ImportError:
-    print("You also need scipy")            
-   
+
+from matplotlib.pyplot import ginput
+import numpy as np
+from scipy.interpolate import UnivariateSpline
+
 
 #def extrap1d(interpolator):
 #    xs = interpolator.x

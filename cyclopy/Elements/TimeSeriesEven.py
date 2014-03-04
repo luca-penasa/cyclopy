@@ -1,9 +1,25 @@
 import scipy
 import scipy.stats
 
-from cyclopy.NumericalMethods import KernelSmoother
-from cyclopy.TimeSeries.TimeSeriesBasic import TimeSeriesBasic
+from matplotlib.pyplot import title, figure, xlabel, ylabel, plot, grid, yscale
 
+import numpy as np
+
+from copy import deepcopy
+
+from ..NumericalMethods import KernelSmoother
+
+from ..NumericalMethods.SignalFilters import bandpass
+
+from ..NumericalMethods.Spectrogram import Spectrogram
+
+from ..NumericalMethods import SignalFilters
+
+
+from ..Elements import TimeSeriesBasic
+
+
+from scipy import signal
 
 class TimeSeriesEven(TimeSeriesBasic):
     """
@@ -20,7 +36,7 @@ class TimeSeriesEven(TimeSeriesBasic):
     See Also: TimeSeriesXY and TimeSeriesBasic
     """
     def __init__(self, y, x_step = 1.0, x_start=0.0, *args, **kwargs):
-        TimeSeriesBasic.__init__(self, y, *args, **kwargs)        
+        TimeSeriesBasic.__init__(self, y, *args, **kwargs)
         self.x_step_ = x_step
         self.x_start_ = x_start
 
@@ -53,6 +69,8 @@ class TimeSeriesEven(TimeSeriesBasic):
             print ("cannot use this method. cannot locate orbital tunig module")
         
         ages = OrbitalTuning.DepthToAge(self.getPositionVector(), agemodel)
+
+        from ..Elements import TimeSeriesXY
             
         return TimeSeriesXY(ages, self.getY())
         

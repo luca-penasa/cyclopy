@@ -1,5 +1,11 @@
 from cyclopy.NumericalMethods import KernelSmoother
-from cyclopy.TimeSeries.TimeSeriesBasic import TimeSeriesBasic
+from cyclopy.Elements.TimeSeriesBasic import TimeSeriesBasic
+
+import numpy as np
+from matplotlib.pyplot import title, xlabel, ylabel, plot, grid
+
+from .TimeSeriesBasic import TimeSeriesBasic
+from .TimeSeriesEven import TimeSeriesEven
 
 
 class TimeSeriesXY(TimeSeriesBasic):

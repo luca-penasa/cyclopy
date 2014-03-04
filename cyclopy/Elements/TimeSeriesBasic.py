@@ -5,15 +5,12 @@ from matplotlib.pyplot import plot, interactive, subplot, figure, title, xlabel,
 interactive(True)
 
 from copy import deepcopy
-from cyclopy.SignalFilters import bandpass
-from cyclopy.SignalFilters import spectrogram_mtspec
-from cyclopy.Spectrogram import Spectrogram
 
-
-
-from scipy import signal
-
-import pylab
+# from ..NumericalMethods.SignalFilters import bandpass, spectrogram_mtspec, Spectrogram
+#
+# from scipy import signal
+#
+# import pylab
 
 
 #import pdb; pdb.set_trace()

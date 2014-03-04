@@ -4,7 +4,14 @@ Created on Tue May 15 11:01:14 2012
 
 @author: luca
 """
+import numpy as np
+from matplotlib.pyplot import figure, plot
 
+from copy import deepcopy
+
+import pylab
+
+from cyclopy.Elements import TimeSeriesXY
 
 class TiePoints(): #Base class  for each tie point type
     def __init__(self, x, y):

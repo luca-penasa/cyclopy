@@ -7,13 +7,8 @@ Created on Mon May 28 20:01:05 2012
 from __future__ import division
 import numpy as np
 from scipy.optimize import fsolve as fsolve
-from scipy.optimize import bisect as bisect
+# from scipy.optimize import bisect as bisect
 from numpy.random import randn
-
-
-
-__name__="MonteCarloMethods"
-
 
 def estimateAR1(x):
     """

@@ -10,14 +10,18 @@ from scipy.linalg import toeplitz
 from scipy.signal import lfilter
 import pylab
 
-from matplotlib.pyplot import plot, interactive, subplot, figure, title, xlabel, ylabel, interactive, grid, semilogy
+from matplotlib.pyplot import  figure, title, xlabel, ylabel, interactive, grid, semilogy
+from ..NoiseModeling.MonteCarloMethods import estimateAR1, generateAR1Noise
+
 interactive(True)
+
+
 
 
 import progressbar as pbar
 pb = pbar.ProgressBar()
 
-import MonteCarloMethods as mcm
+# import MonteCarloMethods as mcm
 
 __name__ = "SSA"
 __doc__ = """
@@ -116,7 +120,7 @@ class SSA:
         if self.need_recomputation_ == True:
             self.update()
         #parameters for the surrogate data
-        gamma, alpha, mu2 = mcm.estimateAR1(self.y_)
+        gamma, alpha, mu2 = estimateAR1(self.y_)
         print ("Got estimates for surrogate data parameters:")
         print ("Gamma: " + str(gamma))
         print ("Alpha: " + str(alpha))
@@ -126,7 +130,7 @@ class SSA:
         s = np.zeros(self.num_montecarlo_)
 
         #produce surrogate data -> EACH ROW IS A REALIZATION
-        self.surrogates_ = mcm.generateAR1Noise(self.n_samples_, self.num_montecarlo_, gamma, alpha)
+        self.surrogates_ = generateAR1Noise(self.n_samples_, self.num_montecarlo_, gamma, alpha)
         #self.surrogates_ = np.loadtxt('/home/luca/Desktop/Smirra/Code/randomX.txt')
 	
         for i in pb(np.arange(self.num_montecarlo_ )):

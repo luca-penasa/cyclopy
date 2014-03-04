@@ -9,35 +9,8 @@ import numpy as np
 import scipy.optimize as optimize
 from pylab import plot, interactive
 
-def getMedian(signal, startarg, stoparg):
-    """
-    get the median value of a slice of an array
-    stoparg is excluded
-    startarg comprised        
-    """    
-    if startarg < 0:
-        startarg = 0
-    
-    if stoparg > len(signal):
-        stoparg = len(signal)
-        
-    return np.median(signal[startarg:stoparg])
-    
 
-def median_filter(signal, windowsize=11):
-    N = len(signal)
-    if (windowsize%2 == 0): #is even
-        lowhwin = windowsize*0.5
-        highwin = lowhwin
-    else: #is odd
-        lowhwin = np.floor(windowsize*0.5)
-        highwin = lowhwin + 1
     
-    smoothed = np.zeros(N)
-    for i in np.arange(N):
-        smoothed[i] = getMedian(signal, i-lowhwin, i+highwin)
-        
-    return smoothed
 
 def getAR1Spectrum( alpha, ro, freqs, f_nyquist, N=None ):
     """    
