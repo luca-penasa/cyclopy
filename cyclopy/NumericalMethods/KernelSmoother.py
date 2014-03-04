@@ -20,6 +20,8 @@ class KernelSmoother:
             specify if the kdtree structure need to be build (if False no kdtree can be used)
         """
 
+        assert (x.size == y.size)
+
         #Add data to self
         sort_ids = np.argsort(x)
         self.x = x[sort_ids]
