@@ -5,14 +5,15 @@ try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
-import sys
+# import sys
 
 
 
 setup(
     name = "cyclopy",
     version = "0.0.1",
-    packages = ['cyclopy'],
+    packages = ['cyclopy', 'cyclopy.Elements', 'cyclopy.External', 'cyclopy.GeologyHelpers', 'cyclopy.NoiseModeling',
+                'cyclopy.NumericalMethods', 'cyclopy.Orbitals', 'cyclopy.Utils', 'cyclopy.tests'],
     install_requires = ['numpy','scipy','mtspec','matplotlib'],
 
     # metadata for upload to PyPI
