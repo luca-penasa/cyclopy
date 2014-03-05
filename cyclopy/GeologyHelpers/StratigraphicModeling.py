@@ -319,6 +319,9 @@ class ResidualsModel:
         
         
 class OutcropModel:
+    def __init__(self):
+        pass
+
     def SetInput(self, points):
         self.umodel = UndeformedModel()
         self.umodel.SetInput(points)        

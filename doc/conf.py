@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # cyclopy documentation build configuration file, created by
-# sphinx-quickstart on Tue Mar  4 10:21:31 2014.
+# sphinx-quickstart on Wed Mar  5 13:06:15 2014.
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
@@ -19,6 +18,13 @@ import sys, os
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
 
+source_path = os.path.abspath("..")
+    # os.path.join(os.path.abspath( os.path.dirname(__file__)), os.path.pardir)
+sys.path.insert(0,source_path)
+
+print(source_path)
+
+sys.path.append(os.path.abspath('sphinxext'))
 # -- General configuration -----------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -26,13 +32,23 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage', 'sphinx.ext.mathjax', 'sphinx.ext.viewcode']
-
+# extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage', 'sphinx.ext.mathjax', 'sphinx.ext.viewcode']
+extensions = [
+          'matplotlib.sphinxext.mathmpl',
+          'matplotlib.sphinxext.only_directives',
+          'matplotlib.sphinxext.plot_directive',
+          'matplotlib.sphinxext.ipython_directive',
+          'sphinx.ext.autodoc',
+          'sphinx.ext.doctest',
+          'ipython_console_highlighting',
+          'inheritance_diagram',
+          'numpydoc']
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
+
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
@@ -41,8 +57,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'cyclopy'
-copyright = '2014, luca penasa'
+project = u'cyclopy'
+copyright = u'2014, luca penasa'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -65,7 +81,7 @@ release = '0.1'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = []
+exclude_patterns = ['_build']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -89,10 +105,17 @@ pygments_style = 'sphinx'
 
 
 # -- Options for HTML output ---------------------------------------------------
+html_theme = "haiku"
+#html_theme_options = {
+#     "rightsidebar": "true",
+#     "relbarbgcolor": "black"
+# }
+
+
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+# html_theme = 'default'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -184,8 +207,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'cyclopy.tex', 'cyclopy Documentation',
-   'luca penasa', 'manual'),
+  ('index', 'cyclopy.tex', u'cyclopy Documentation',
+   u'luca penasa', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -214,8 +237,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'cyclopy', 'cyclopy Documentation',
-     ['luca penasa'], 1)
+    ('index', 'cyclopy', u'cyclopy Documentation',
+     [u'luca penasa'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -228,8 +251,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'cyclopy', 'cyclopy Documentation',
-   'luca penasa', 'cyclopy', 'One line description of project.',
+  ('index', 'cyclopy', u'cyclopy Documentation',
+   u'luca penasa', 'cyclopy', 'One line description of project.',
    'Miscellaneous'),
 ]
 

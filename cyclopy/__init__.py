@@ -3,6 +3,18 @@
 #            'SpectralEstimation', 'Spectrogram', 'SSA', 'Utils']
 #
 
+
+__doc__ = """ cyclopy is python library for cyclostratigraphical anaylisys. Link_
+
+
+:author: luca penasa
+:license: GPL2
+
+.. _Link: https://github.com/luca-penasa/cyclopy
+
+"""
+
+
 from . import Elements
 from . import External
 from . import GeologyHelpers
