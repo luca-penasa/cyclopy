@@ -1,3 +1,4 @@
+from cmath import sqrt
 import scipy
 import scipy.stats
 
@@ -58,24 +59,52 @@ class TimeSeriesEven(TimeSeriesBasic):
         
     def getMinX(self):
         return self.x_start_
+
+    def sampleAt(self, position, max_distance):
+        x = self.getPositionVector()
+        sq_distances = (x - position)**2
+        argsorting = np.argsort(sq_distances)
+        best_id =  argsorting[0]
+
+        if sq_distances[best_id] <= max_distance**2:
+            return self.y_[best_id]
+        else:
+            return np.nan
+
+
         
     def getMaxX(self):
         return np.max(self.getPositionVector())
         
-    def TuneIt(self, agemodel):
+    def TuneIt(self, agemodel, spline_k = 1):
         try:
-            import OrbitalTuning
+            from ..Orbitals import DepthToAge
         except ImportError:
             print ("cannot use this method. cannot locate orbital tunig module")
         
-        ages = OrbitalTuning.DepthToAge(self.getPositionVector(), agemodel)
+        ages = DepthToAge(self.getPositionVector(), agemodel, k=spline_k)
 
         from ..Elements import TimeSeriesXY
             
         return TimeSeriesXY(ages, self.getY())
-        
-        
-            
+
+    def toTime(self, sedrate):
+        """
+        from space to time-domain
+        sedrate in m/Ma
+        new x-scale will be in kyr
+        """
+
+        srk=sedrate/1000; # converts sedrate to m/kyr
+        self.x_step_/= srk;
+        self.x_start_ /= srk
+        self.unit_ = "kyr"
+
+    def toSpace(self, sedrate):
+        srk=sedrate/1000; # converts sedrate to m/kyr
+        self.x_step_*= srk;
+        self.x_start_ *= srk
+        self.unit_ = "m"
         
     def crossCorrelate(self, series_b, do_plot=True, normalize=True):
         assert(self.x_step_ == series_b.x_step_)
@@ -113,8 +142,8 @@ class TimeSeriesEven(TimeSeriesBasic):
         new_series.y_ = bandpass(new_series.y_, fa, fb, new_series.x_step_)
         return new_series
         
-    def bandpassZeroShift(self, fa, fb, n=201):
-        f = SignalFilters.designLinearBandpass(fa, fb, self.x_step_, n)
+    def bandpassZeroShift(self, fa, fb, n=201, show_res = False):
+        f = SignalFilters.designLinearBandpass(fa, fb, self.x_step_, n, show= show_res)
         new_series = deepcopy(self)
         filtered = signal.filtfilt(f, [1.0], self.y_)
         
@@ -330,14 +359,14 @@ class TimeSeriesEven(TimeSeriesBasic):
 	#TODO finish this, using scipy.stats.pearsonr
 
     def getKS(self, h=1.0):
-        smoother = KernelSmoother.KernelSmoother(self.getPositionVector() , self.y_)
+        smoother = KernelSmoother(self.getPositionVector() , self.y_)
         new_y = smoother(self.getPositionVector(), h)
         new_series = deepcopy(self)
         new_series.y_ = new_y
         return new_series
        
     def detrendKS(self, h=1.0):
-        smoother = KernelSmoother.KernelSmoother(self.getPositionVector() , self.y_)
+        smoother = KernelSmoother(self.getPositionVector() , self.y_)
         new_y = smoother(self.getPositionVector(), h)
         new_series = deepcopy(self)
         new_series.y_ = new_series.y_ - new_y

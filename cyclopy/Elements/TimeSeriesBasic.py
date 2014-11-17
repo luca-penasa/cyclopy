@@ -71,13 +71,23 @@ class TimeSeriesBasic():
         line = '-' * line_lenght
         
         print(line  + " " +  title + " " + line)  
-   
+
+    def getDeepCopy(self):
+        from copy import deepcopy
+        return  deepcopy(self)
         
     def getMean(self):
         return self.y_.mean()
    
     def getStd(self):
         return self.y_.std()
+
+    def __add__(self, other):
+        assert(self.getNumberOfSamples() == other.getNumberOfSamples())
+        from copy import deepcopy
+        new = deepcopy(self)
+        new.y_ = self.y_ + other.y_
+        return new
         
     def getY(self):
         return self.y_
@@ -115,6 +125,15 @@ class TimeSeriesBasic():
         return self.y_
    
     def getDeepCopy(self):
-        return deepcopy(self)  
+        return deepcopy(self)
+
+    def getPicker(self):
+        figure()
+        self.plot()
+        from cyclopy.Orbitals import CollectPickPoints2
+        p = CollectPickPoints2()
+        return p
+
+
    
         
