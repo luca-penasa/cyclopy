@@ -103,7 +103,7 @@ class TimeSeriesXY(TimeSeriesBasic):
             interpolator = scipy.interpolate.Rbf(self.x_, self.y_, function='thin_plate')
 
         if method == 'ks':
-            smoother = KernelSmoother.KernelSmoother(self.x_, self.y_)
+            smoother = KernelSmoother(self.x_, self.y_)
 
 
         #call interpolators

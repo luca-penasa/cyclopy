@@ -26,7 +26,8 @@ class TimeSeriesBasic():
         self.unit_ = unit
 
     def __repr__(self):
-        return ( self.__module__ + ":\n" +  str(self.y_) ) 
+        return ( self.__module__ + ":\n" +  str(self.y_) )
+
         
     def remapValues(self, dictionary=dict()):
         """
@@ -101,7 +102,17 @@ class TimeSeriesBasic():
         '''
         change the mean to the given value
         '''
-        self.y_ = self.y_ - self.y_.mean() + mean
+        self.y_ = self.y_ - self.getMean() + mean
+
+    def getMean(self):
+        mdat = np.ma.masked_array(self.y_,np.isnan(self.y_))
+        mm = np.mean(mdat)
+        return mm
+
+    def getStd(self):
+        mdat = np.ma.masked_array(self.y_,np.isnan(self.y_))
+        mm = np.std(mdat)
+        return mm
 
     def changeStd(self, std= 1.0):
         '''
@@ -109,7 +120,7 @@ class TimeSeriesBasic():
         '''
         mean = self.getMean()
         self.y_ -= mean
-        self.y_ = self.y_ / self.y_.std() * std
+        self.y_ = self.y_ / self.getStd() * std
         
         self.y_ += mean
         
