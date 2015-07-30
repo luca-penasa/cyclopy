@@ -1,4 +1,4 @@
-__all__ = ['DipDirectionToStrikeVector', 'DipDirectionAndDipAngleToDipVector', 'Project3DPointsOnStratigraphicNormal']
+__all__ = ['DipDirectionToStrikeVector', 'DipDirectionAndDipAngleToDipVector', 'Project3DPointsOnStratigraphicNormal', 'DipDirectionAndDipAngleToPlaneNormal']
 
 
 # only importing most used methods
