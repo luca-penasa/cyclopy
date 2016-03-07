@@ -72,7 +72,7 @@ def annotate_peaks(f, powers, noise=None, dots=False, fontsize=8, lookahead=10):
 
 
 
-    print(max_ids)
+    # print(max_ids)
     if dots:
         plot(f[max_ids], powers[max_ids], 'o')
 

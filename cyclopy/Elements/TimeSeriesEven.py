@@ -42,7 +42,7 @@ class TimeSeriesEven(TimeSeriesBasic):
         self.x_start_ = x_start
 
         
-    def plot(self, nfig=False):
+    def plot(self, nfig=False, *args, **kwargs):
         x = self.getPositionVector()        
 
         if nfig:
@@ -51,7 +51,7 @@ class TimeSeriesEven(TimeSeriesBasic):
         title(self.title_)
         xlabel(self.unit_)
         ylabel(self.title_)
-        plot(x, self.y_)
+        plot(x, self.y_, *args, **kwargs)
         grid()
         
     def addShift(self, shift):
@@ -253,6 +253,8 @@ class TimeSeriesEven(TimeSeriesBasic):
                 
         if ylog:
             yscale('log')
+
+        return freqs, power
                 
         
     
@@ -262,8 +264,11 @@ class TimeSeriesEven(TimeSeriesBasic):
         spectra = []
         for  pos in positions:
             this_slice = self.getSlice(pos - winsize*0.5, pos+winsize*0.5)
+            # figure()
+            # this_slice.plot()
             f, sp = this_slice.getMTMSpectrum(**kwargs)
             spectra.append([f, sp])
+
             
             
         return spectra
@@ -356,7 +361,7 @@ class TimeSeriesEven(TimeSeriesBasic):
         a_n = a_part.getNumberOfSamples()
         b_n = b_part.getNumberOfSamples()
 
-	#TODO finish this, using scipy.stats.pearsonr
+	    #TODO finish this, using scipy.stats.pearsonr
 
     def getKS(self, h=1.0):
         smoother = KernelSmoother(self.getPositionVector() , self.y_)

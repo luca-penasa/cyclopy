@@ -114,6 +114,15 @@ class TimeSeriesBasic():
         mm = np.std(mdat)
         return mm
 
+    def getWithoutNans(self):
+        from copy import deepcopy
+        newseries = deepcopy(self)
+        mean = newseries.getMean()
+        newseries.y_ -= mean
+        newseries.y_[np.isnan(newseries.y_)] = 0
+        newseries.y_ += mean
+        return newseries
+
     def changeStd(self, std= 1.0):
         '''
         change the std to the given value
