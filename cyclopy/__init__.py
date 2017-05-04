@@ -20,8 +20,10 @@ from . import External
 from . import GeologyHelpers
 from . import NoiseModeling
 from . import NumericalMethods
+from . import Data
 from . import Orbitals
 from . import Utils
+
 
 
 
