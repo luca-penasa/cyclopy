@@ -1,11 +1,11 @@
 from cyclopy.NumericalMethods import KernelSmoother
-from cyclopy.Elements.TimeSeriesBasic import TimeSeriesBasic
+#from cyclopy.Elements.TimeSeriesBasic import TimeSeriesBasic
 
 import numpy as np
 from matplotlib.pyplot import title, xlabel, ylabel, plot, grid
 
 from .TimeSeriesBasic import TimeSeriesBasic
-from .TimeSeriesEven import TimeSeriesEven
+#from .TimeSeriesEven import TimeSeriesEven
 
 
 class TimeSeriesXY(TimeSeriesBasic):
@@ -66,7 +66,8 @@ class TimeSeriesXY(TimeSeriesBasic):
         return s_steps
 
 
-
+    def getPositionVector(self):
+        return self.x_
 
 
     def printStepInfos(self):
@@ -115,42 +116,12 @@ class TimeSeriesXY(TimeSeriesBasic):
         else:
             new_y = smoother(new_x, other)
 
+
         new_series = TimeSeriesEven(new_y, step, np.min(self.x_), self.title_, self.unit_)
 
         return new_series
 
-    def resampeAt(self, positions, step=None, method='linear', h=1):
-        '''
-        h is the h parameters for kernel smoother, unused for other methods
-        methods:
-        'linear'
-        'rbf'
-        'ks'
 
-        positions is a array-type, with the positions at which resample the serie            
-        '''
-        import scipy.interpolate
-
-
-        if method == 'linear':
-            interpolator = scipy.interpolate.interp1d(self.x_, self.y_, kind='linear')
-
-        if method == 'rbf':
-            interpolator = scipy.interpolate.Rbf(self.x_, self.y_, function='thin_plate')
-
-        if method == 'ks':
-            smoother = KernelSmoother.KernelSmoother(self.x_, self.y_)
-
-
-        #call interpolators
-        if method != 'ks':
-            new_y = interpolator(positions)
-        else:
-            new_y = smoother(positions, h)
-
-        new_series = TimeSeriesXY(positions, new_y, self.title_, self.unit_)
-
-        return new_series
         
 
     

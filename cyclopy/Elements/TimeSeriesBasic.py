@@ -14,7 +14,9 @@ from copy import deepcopy
 
 
 #import pdb; pdb.set_trace()
-         
+
+#from ..Elements import TimeSeriesXY
+
     
 
 class TimeSeriesBasic(): 
@@ -92,7 +94,7 @@ class TimeSeriesBasic():
         
     def getY(self):
         return self.y_
-        
+
         
     def getUniqueValues(self):
         return np.unique(self.y_)
@@ -153,6 +155,46 @@ class TimeSeriesBasic():
         from cyclopy.Orbitals import CollectPickPoints2
         p = CollectPickPoints2()
         return p
+
+    def resampleAt(self, positions, step=None, method='linear', h=1):
+        '''
+        h is the h parameters for kernel smoother, unused for other methods
+        methods:
+        'linear'
+        'rbf'
+        'ks'
+
+        positions is a array-type, with the positions at which resample the serie
+        '''
+        import scipy.interpolate
+
+        x =self.getPositionVector()
+        y = self.getY()
+
+        if method == 'linear':
+            interpolator = scipy.interpolate.interp1d(x, y, kind='linear', bounds_error=False, fill_value=np.nan)
+
+        if method == 'rbf':
+            interpolator = scipy.interpolate.Rbf(x, y, function='thin_plate')
+
+        if method == 'ks':
+            from cyclopy.NumericalMethods import KernelSmoother
+            smoother = KernelSmoother.KernelSmoother(x, y)
+
+
+        #call interpolators
+        if method != 'ks':
+            new_y = interpolator(positions)
+        else:
+            new_y = smoother(positions, h)
+
+        from cyclopy.Elements import TimeSeriesXY, TimeSeriesEven
+
+
+
+        new_series = TimeSeriesXY(positions, new_y, self.title_, self.unit_)
+
+        return new_series
 
 
    
