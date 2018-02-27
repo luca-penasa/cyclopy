@@ -51,8 +51,9 @@ class TimeSeriesEven(TimeSeriesBasic):
         title(self.title_)
         xlabel(self.unit_)
         ylabel(self.title_)
-        plot(x, self.y_, *args, **kwargs)
+        pp = plot(x, self.y_, *args, **kwargs)
         grid()
+        return pp
         
     def addShift(self, shift):
         self.x_start_ += shift
@@ -72,7 +73,7 @@ class TimeSeriesEven(TimeSeriesBasic):
             return np.nan
 
 
-        
+
     def getMaxX(self):
         return np.max(self.getPositionVector())
         
@@ -105,6 +106,21 @@ class TimeSeriesEven(TimeSeriesBasic):
         self.x_step_*= srk;
         self.x_start_ *= srk
         self.unit_ = "m"
+
+    def dropNansAtMargins(self, inplace=False):
+        if not inplace:
+            new = deepcopy(self)
+        else:
+            new = self
+
+        ids = np.where(np.isfinite(new.getY()))
+        first = ids[0][0]
+        last = ids[0][-1]
+
+        new.x_start_ = new.x_start_ + new.x_step_ * first
+        new.y_ = new.y_[first:last]
+
+        return new
         
     def crossCorrelate(self, series_b, do_plot=True, normalize=True):
         assert(self.x_step_ == series_b.x_step_)
@@ -196,6 +212,8 @@ class TimeSeriesEven(TimeSeriesBasic):
             
 
         ampl, freqs = mtspec.mtspec(new_signal, ser.x_step_, pi, nfft=pad_to)
+
+
         
         statistics = {}
         
@@ -210,7 +228,8 @@ class TimeSeriesEven(TimeSeriesBasic):
                                 'jack5_95': jack,
                                 'f_values': f,
                                 'dof': dof}
-                                                        
+
+
         if max_f != None:
             ids = np.argwhere(freqs <= max_f)            
             ampl = ampl[ids]
@@ -219,7 +238,13 @@ class TimeSeriesEven(TimeSeriesBasic):
             if stats: # cut away also statistics
                 for k in statistics.keys():
                     arr = statistics[k]
-                    statistics[k] = arr[ids]                    
+                    statistics[k] = arr[ids]
+
+            ampl = ampl.T[0]
+            freqs = freqs.T[0]
+
+
+
                 
         
         if stats:
@@ -281,7 +306,11 @@ class TimeSeriesEven(TimeSeriesBasic):
         import matplotlib.pyplot as plt
 
         fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
+
+        from mpl_toolkits.mplot3d import Axes3D
+        ax = Axes3D(fig)
+
+        # ax = fig.add_subplot(111, projection='3d')
 
         if mode=='lines':        
             i = 0

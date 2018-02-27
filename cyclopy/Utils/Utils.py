@@ -46,7 +46,7 @@ def get_numbered_filename(filename, extension, path="./"):
     return filename
 
 
-def annotate_peaks(f, powers, noise=None, dots=False, fontsize=8, lookahead=10):
+def annotate_peaks(f, powers, noise=None, dots=False, fontsize=8, lookahead=10, **kwargs):
     """
     annotate_peaks plot periods of peaks in current figure.
     noise is the expected noise level for each spctra power and it is used to extract peaks
@@ -84,7 +84,7 @@ def annotate_peaks(f, powers, noise=None, dots=False, fontsize=8, lookahead=10):
 
     for id in max_ids:
         text(f[id], powers[id] + overhang, str(round(1 / f[id], 2)), rotation=90, horizontalalignment='center',
-             verticalalignment='bottom', fontsize=fontsize)
+             verticalalignment='bottom', fontsize=fontsize, **kwargs)
 
     return max_ids
 

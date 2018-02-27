@@ -5,7 +5,7 @@ import numpy as np
 from matplotlib.pyplot import title, xlabel, ylabel, plot, grid
 
 from .TimeSeriesBasic import TimeSeriesBasic
-#from .TimeSeriesEven import TimeSeriesEven
+from .TimeSeriesEven import TimeSeriesEven
 
 
 class TimeSeriesXY(TimeSeriesBasic):

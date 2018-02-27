@@ -30,6 +30,10 @@ class TimeSeriesBasic():
     def __repr__(self):
         return ( self.__module__ + ":\n" +  str(self.y_) )
 
+    def getValidSlices(self):
+        a = self.y_
+        return [s for s in np.ma.clump_unmasked(np.ma.masked_invalid(a))]
+
         
     def remapValues(self, dictionary=dict()):
         """
@@ -80,10 +84,46 @@ class TimeSeriesBasic():
         return  deepcopy(self)
         
     def getMean(self):
-        return self.y_.mean()
+        return np.nanmean(self.y_)
    
     def getStd(self):
-        return self.y_.std()
+        return np.nanstd(self.y_)
+
+    def getMinY(self):
+        return np.nanmin(self.y_)
+
+    def getMaxY(self):
+        return np.nanmax(self.y_)
+
+    def getSSAGapFilled(self, **kwargs):
+        """
+        :param kwargs: wrapper method to call gapfillSSA from R package
+        spectral.methods.
+        :return:
+        """
+        try:
+            from rpy2.robjects.packages import importr
+            stats = importr('spectral.methods')
+
+            import array
+        except:
+            import sys
+            e = sys.exc_info()[0]
+            print ("Errors in import R package spectral methods or rpy2 python module.\n"
+                   "check wheter rpy2 is installed. If needed install spectral.methods by\n"
+                   "install.packages(\"spectral.methods\") from a R console")
+
+            print("Except was {}".format(e))
+
+        arr = array.array("d", self.y_.tolist())
+        out = stats.gapfillSSA(series=arr, **kwargs)
+
+        t = out[1]
+        c = np.array(t)
+
+        new = deepcopy(self)
+        new.y_ = c
+        return new
 
     def __add__(self, other):
         assert(self.getNumberOfSamples() == other.getNumberOfSamples())
@@ -155,6 +195,8 @@ class TimeSeriesBasic():
         from cyclopy.Orbitals import CollectPickPoints2
         p = CollectPickPoints2()
         return p
+
+
 
     def resampleAt(self, positions, step=None, method='linear', h=1):
         '''
